@@ -1,6 +1,7 @@
 package com.jacobromero.cs499_assignment03;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.util.HashMap;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
@@ -44,20 +45,32 @@ public class App extends Configured implements Tool {
 			
 			// when the movie mapper finishes we can print the title, and avg rating out
 			if (moviesWithNames != null) {
+				File newTopMovies = new File(args[2] + "/top_ten_movies.txt");
+				FileWriter topTenMovies = new FileWriter(newTopMovies);
+
 				System.out.println("\n\nTop 10 movies by average rating.");
 				for (String key : moviesWithNames.keySet()) {
+					topTenMovies.write(key + " | " + Math.round(moviesWithNames.get(key)*100.0)/100.0 + "\n");
 					System.out.println(key + " | " + Math.round(moviesWithNames.get(key)*100.0)/100.0);
 				}
+
+				topTenMovies.close();
 			}
 		}
 		
 		// when job2 finishes we can print out the top user reviewers
 		if (job2Complete) {
 			if (topReviewers != null) {
+				File newTopUsers = new File(args[3] + "/top_ten_reviewers.txt");
+				FileWriter topTenUsers = new FileWriter(newTopUsers);
+
 				System.out.println("\n\nTop 10 reviewers by number of reviews.");
 				for (int key : topReviewers.keySet()) {
+					topTenUsers.write(key + " | " + topReviewers.get(key) + "\n");
 					System.out.println(key + " | " + topReviewers.get(key));
 				}
+
+				topTenUsers.close();
 			}
 		}
 
